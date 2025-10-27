@@ -1,0 +1,44 @@
+{
+  "name": "@ldesign/env-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "LDesign 环境配置管理工具 - Monorepo 工作空间",
+  "scripts": {
+    "build": "pnpm -r --filter='./packages/*' build",
+    "build:core": "pnpm --filter @ldesign/env-core build",
+    "build:cli": "pnpm --filter @ldesign/env-cli build",
+    "build:server": "pnpm --filter @ldesign/env-server build",
+    "build:web-ui": "pnpm --filter @ldesign/env-web-ui build",
+    "dev": "pnpm --filter @ldesign/env-cli dev",
+    "dev:server": "pnpm --filter @ldesign/env-server dev",
+    "dev:web": "pnpm --filter @ldesign/env-web-ui dev",
+    "clean": "pnpm -r --parallel exec rimraf dist",
+    "test": "pnpm -r --filter='./packages/*' test",
+    "lint": "pnpm -r --filter='./packages/*' lint"
+  },
+  "keywords": [
+    "ldesign",
+    "env",
+    "environment",
+    "config",
+    "configuration",
+    "encryption",
+    "validation"
+  ],
+  "author": "LDesign Team",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "prettier": "^3.1.0",
+    "rimraf": "^5.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.7.3",
+    "vitest": "^1.6.1"
+  }
+}
+

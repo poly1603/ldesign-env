@@ -1,0 +1,51 @@
+{
+  "name": "@ldesign/env-core",
+  "version": "1.0.0",
+  "description": "LDesign 环境配置管理 - 核心功能库",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
+    "type-check": "tsc --noEmit",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.7.3",
+    "tsup": "^8.0.0",
+    "vitest": "^1.6.1",
+    "rimraf": "^5.0.5"
+  },
+  "keywords": [
+    "env",
+    "environment",
+    "config",
+    "encryption",
+    "validation"
+  ],
+  "author": "LDesign Team",
+  "license": "MIT"
+}
+

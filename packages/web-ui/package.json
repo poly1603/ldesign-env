@@ -1,0 +1,27 @@
+{
+  "name": "@ldesign/env-web-ui",
+  "version": "1.0.0",
+  "description": "LDesign 环境配置管理 - Web UI",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "vue": "^3.5.22",
+    "vue-router": "^4.2.5",
+    "pinia": "^2.1.7",
+    "naive-ui": "^2.43.1",
+    "axios": "^1.6.0",
+    "monaco-editor": "^0.45.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.4",
+    "@vue/tsconfig": "^0.5.0",
+    "typescript": "^5.7.3",
+    "vite": "^5.4.21",
+    "vue-tsc": "^1.8.27"
+  }
+}
+
