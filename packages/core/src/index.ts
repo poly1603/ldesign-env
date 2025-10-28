@@ -25,3 +25,22 @@ export type {
   EnvDiff
 } from './types'
 
+// 模板系统
+export {
+  templates,
+  getTemplate,
+  listTemplates,
+  getTemplatesByCategory,
+  nextjsTemplate,
+  nestjsTemplate,
+  expressTemplate,
+  reactTemplate,
+  vueTemplate,
+  dockerTemplate
+} from './templates'
+export type { ConfigTemplate } from './templates'
+
+// 导入导出
+export { ImportExportManager } from './ImportExport'
+export type { ExportFormat, ExportOptions, ImportOptions } from './ImportExport'
+

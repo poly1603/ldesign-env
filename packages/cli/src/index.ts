@@ -18,6 +18,8 @@ import { getCommand } from './commands/get.js'
 import { setCommand } from './commands/set.js'
 import { exportCommand } from './commands/export.js'
 import { serveCommand } from './commands/serve.js'
+import { templateCommand } from './commands/template.js'
+import { importCommand } from './commands/import.js'
 
 // 获取 package.json
 const __filename = fileURLToPath(import.meta.url)
@@ -35,6 +37,8 @@ program
 
 // 注册所有命令
 initCommand(program)
+templateCommand(program)
+importCommand(program)
 useCommand(program)
 listCommand(program)
 validateCommand(program)

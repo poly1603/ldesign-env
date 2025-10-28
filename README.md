@@ -2,8 +2,9 @@
 
 > 🔧 智能的环境配置管理工具，让多环境部署变得简单
 
-## ✨ 特性
+## ❌ 特性
 
+### 核心功能
 - 🔧 **多环境管理** - dev/test/staging/prod 环境配置
 - ✅ **配置验证** - 环境变量类型和必填项验证
 - 🔒 **配置加密** - 敏感信息 AES-256-GCM 加密存储
@@ -11,6 +12,14 @@
 - 🧬 **配置继承** - 基础配置和环境配置合并
 - 📝 **类型安全** - 完整的 TypeScript 支持
 - 🔍 **配置检查** - 自动检测配置问题
+
+### 新增功能 (v1.1.0)
+- 📋 **配置模板** - 内置 Next.js/NestJS/Express 等 6 个模板
+- 🔁 **格式转换** - 支持 ENV/JSON/YAML/TOML 互转
+- 📥 **配置导入** - 从多种格式导入配置
+- 📤 **配置导出** - 导出为多种格式，支持敏感字段屏蔽
+
+### Web 功能
 - 🌐 **Web UI** - 可视化管理界面
 - 📊 **历史记录** - 配置变更历史追踪
 - 🔌 **WebSocket** - 实时配置更新推送
@@ -71,11 +80,14 @@ ldesign-env serve
 # 自动在浏览器打开 http://localhost:3456
 ```
 
-## 📖 完整命令列表
+## 📍 完整命令列表
 
 ```bash
 # 初始化
 ldesign-env init                    # 初始化配置文件
+ldesign-env template list           # 列出所有模板
+ldesign-env template use <name>     # 使用指定模板
+ldesign-env template init           # 交互式选择模板
 
 # 环境管理
 ldesign-env list                    # 列出所有环境
@@ -87,6 +99,7 @@ ldesign-env get <key>               # 获取配置值
 ldesign-env set <key> <value>       # 设置配置值
 ldesign-env validate                # 验证配置
 ldesign-env export                  # 导出环境变量
+ldesign-env import <file>           # 导入配置文件
 
 # 加密操作
 ldesign-env encrypt <value>         # 加密值
