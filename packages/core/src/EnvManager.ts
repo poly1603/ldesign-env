@@ -17,7 +17,24 @@ import type {
 
 /**
  * 环境配置管理器
- * 核心类，提供完整的环境配置管理功能
+ *
+ * 核心类，提供完整的环境配置管理功能，包括：
+ * - 多环境配置加载和切换
+ * - 基于 Schema 的配置验证
+ * - 敏感信息加密/解密
+ * - 配置变更监听
+ * - 环境配置对比
+ *
+ * @example
+ * ```typescript
+ * const manager = new EnvManager({
+ *   baseDir: '/path/to/project',
+ *   encryptionKey: process.env.LDESIGN_ENV_KEY
+ * })
+ *
+ * await manager.load('production')
+ * const apiUrl = manager.get('API_URL')
+ * ```
  */
 export class EnvManager {
   private loader: ConfigLoader
@@ -36,7 +53,11 @@ export class EnvManager {
       schemaPath: options.schemaPath || '',
       currentEnvPath: options.currentEnvPath || '',
       encryptionKey: options.encryptionKey || this.loadEncryptionKey(options.baseDir || process.cwd()),
-      autoLoad: options.autoLoad !== false
+      autoLoad: options.autoLoad !== false,
+      enableCache: options.enableCache ?? false,
+      cacheTTL: options.cacheTTL ?? 60000,
+      watchFiles: options.watchFiles ?? false,
+      customValidators: options.customValidators ?? []
     }
 
     this.loader = new ConfigLoader(this.options.baseDir)
@@ -92,6 +113,19 @@ export class EnvManager {
 
   /**
    * 加载环境配置
+   *
+   * @param environment - 要加载的环境名称，如 'development', 'production'
+   * @param baseEnvironment - 可选的基础环境，用于配置继承
+   * @throws {文件不存在错误} 当环境配置文件不存在时
+   *
+   * @example
+   * ```typescript
+   * // 加载单个环境
+   * await manager.load('production')
+   *
+   * // 带基础环境的加载（配置继承）
+   * await manager.load('staging', 'development')
+   * ```
    */
   async load(environment: Environment, baseEnvironment?: Environment): Promise<void> {
     // 加载 schema（如果存在）
@@ -128,6 +162,17 @@ export class EnvManager {
 
   /**
    * 获取配置值
+   *
+   * @typeParam T - 返回值类型
+   * @param key - 配置项的键名
+   * @param defaultValue - 配置项不存在时的默认值
+   * @returns 配置值，如果配置项不存在则返回默认值
+   *
+   * @example
+   * ```typescript
+   * const apiUrl = manager.get<string>('API_URL')
+   * const port = manager.get<number>('PORT', 3000)
+   * ```
    */
   get<T = any>(key: string, defaultValue?: T): T {
     if (key in this.config) {
@@ -138,6 +183,12 @@ export class EnvManager {
 
   /**
    * 设置配置值
+   *
+   * @param key - 配置项的键名
+   * @param value - 要设置的值
+   *
+   * @remarks
+   * 此方法只修改内存中的配置，要持久化请调用 {@link save} 方法
    */
   set(key: string, value: any): void {
     const oldValue = this.config[key]
@@ -201,6 +252,12 @@ export class EnvManager {
 
   /**
    * 保存配置到文件
+   *
+   * @param environment - 可选的目标环境，默认为当前环境
+   * @throws {错误} 当未指定环境且当前环境为空时
+   *
+   * @remarks
+   * 如果配置字段在 Schema 中标记为 secret，将自动加密后保存
    */
   async save(environment?: Environment): Promise<void> {
     const env = environment || this.currentEnv
@@ -246,7 +303,19 @@ export class EnvManager {
   }
 
   /**
-   * 对比两个环境的差异
+   * 对比两个环境的配置差异
+   *
+   * @param envA - 第一个环境名称
+   * @param envB - 第二个环境名称
+   * @returns 包含 added, removed, modified, unchanged 的差异对象
+   *
+   * @example
+   * ```typescript
+   * const diff = await manager.diff('development', 'production')
+   * console.log('新增:', diff.added)
+   * console.log('删除:', diff.removed)
+   * console.log('修改:', diff.modified)
+   * ```
    */
   async diff(envA: Environment, envB: Environment): Promise<EnvDiff> {
     const configA = this.loader.load(envA)
@@ -313,6 +382,22 @@ export class EnvManager {
 
   /**
    * 监听配置变更
+   *
+   * @param listener - 配置变更回调函数
+   * @returns 取消监听的函数
+   *
+   * @example
+   * ```typescript
+   * const unwatch = manager.watch((event) => {
+   *   console.log('配置已变更:', event.environment)
+   *   event.changes.forEach(change => {
+   *     console.log(`${change.action}: ${change.key}`)
+   *   })
+   * })
+   *
+   * // 取消监听
+   * unwatch()
+   * ```
    */
   watch(listener: ConfigChangeListener): () => void {
     this.listeners.push(listener)

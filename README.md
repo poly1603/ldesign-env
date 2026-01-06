@@ -2,27 +2,37 @@
 
 > 🔧 智能的环境配置管理工具，让多环境部署变得简单
 
-## ❌ 特性
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+
+## ✨ 特性
 
 ### 核心功能
 - 🔧 **多环境管理** - dev/test/staging/prod 环境配置
-- ✅ **配置验证** - 环境变量类型和必填项验证
+- ✅ **配置验证** - 基于 Schema 的类型和必填项验证
 - 🔒 **配置加密** - 敏感信息 AES-256-GCM 加密存储
 - 🔄 **动态切换** - 运行时环境配置切换
 - 🧬 **配置继承** - 基础配置和环境配置合并
-- 📝 **类型安全** - 完整的 TypeScript 支持
-- 🔍 **配置检查** - 自动检测配置问题
+- 📝 **类型安全** - 完整的 TypeScript 支持，泛型类型推断
+- 🔍 **配置搜索** - 强大的配置搜索功能，支持模糊/正则匹配
+- 📦 **配置备份** - 完整的备份和恢复功能
+- 🚀 **性能优化** - LRU 缓存机制，异步文件操作
 
 ### 新增功能 (v1.1.0)
-- 📋 **配置模板** - 内置 Next.js/NestJS/Express 等 6 个模板
+- 📋 **配置模板** - 内置 Next.js/NestJS/Express/React/Vue/Docker 模板
 - 🔁 **格式转换** - 支持 ENV/JSON/YAML/TOML 互转
 - 📥 **配置导入** - 从多种格式导入配置
 - 📤 **配置导出** - 导出为多种格式，支持敏感字段屏蔽
+- 🔍 **配置搜索** - 支持精确/模糊/正则匹配
+- 📦 **备份管理** - 创建、恢复、验证备份
 
 ### Web 功能
-- 🌐 **Web UI** - 可视化管理界面
+- 🌐 **Web UI** - 可视化管理界面 (Vue 3 + Naive UI)
 - 📊 **历史记录** - 配置变更历史追踪
 - 🔌 **WebSocket** - 实时配置更新推送
+- 🔒 **API 认证** - 支持 API Key 认证
+- ⚡ **速率限制** - 内置请求限流保护
 
 ## 📦 安装
 

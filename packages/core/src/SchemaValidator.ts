@@ -3,7 +3,26 @@ import type { ConfigSchema, ConfigObject, ValidationResult, ValidationError } fr
 
 /**
  * Schema 验证器
- * 基于 zod 进行配置验证
+ *
+ * 基于 Zod 进行配置验证，支持：
+ * - 字符串类型：正则模式、长度限制、枚举值
+ * - 数字类型：最小/最大值
+ * - 布尔类型
+ * - JSON 类型
+ * - 必填字段和默认值
+ *
+ * @example
+ * ```typescript
+ * const validator = new SchemaValidator({
+ *   API_URL: { type: 'string', required: true, pattern: '^https?://' },
+ *   PORT: { type: 'number', min: 1, max: 65535 }
+ * })
+ *
+ * const result = validator.validate(config)
+ * if (!result.valid) {
+ *   console.error('验证失败:', result.errors)
+ * }
+ * ```
  */
 export class SchemaValidator {
   private schema: ConfigSchema
@@ -99,6 +118,9 @@ export class SchemaValidator {
 
   /**
    * 验证配置对象
+   *
+   * @param config - 要验证的配置对象
+   * @returns 验证结果，包含 valid 和 errors 字段
    */
   validate(config: ConfigObject): ValidationResult {
     const errors: ValidationError[] = []
@@ -145,6 +167,10 @@ export class SchemaValidator {
 
   /**
    * 验证单个字段
+   *
+   * @param fieldName - 字段名称
+   * @param value - 要验证的值
+   * @returns 验证结果，只包含该字段的错误
    */
   validateField(fieldName: string, value: any): ValidationResult {
     const fieldSchema = this.schema[fieldName]
@@ -183,7 +209,9 @@ export class SchemaValidator {
   }
 
   /**
-   * 获取必填字段列表
+   * 获取 Schema 中所有必填字段的列表
+   *
+   * @returns 必填字段名称数组
    */
   getRequiredFields(): string[] {
     return Object.entries(this.schema)
@@ -192,7 +220,9 @@ export class SchemaValidator {
   }
 
   /**
-   * 获取加密字段列表
+   * 获取 Schema 中所有加密字段的列表
+   *
+   * @returns 加密字段名称数组（schema 中标记为 `secret: true` 的字段）
    */
   getSecretFields(): string[] {
     return Object.entries(this.schema)

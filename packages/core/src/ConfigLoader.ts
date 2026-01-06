@@ -5,7 +5,19 @@ import type { ConfigObject, ConfigSchema, Environment } from './types'
 
 /**
  * 配置加载器
- * 负责从 .env 文件加载配置
+ *
+ * 负责从 .env 文件加载配置，支持：
+ * - 加载指定环境的配置文件
+ * - 配置继承（基础环境 + 目标环境）
+ * - Schema 文件加载
+ * - 配置序列化和反序列化
+ *
+ * @example
+ * ```typescript
+ * const loader = new ConfigLoader('/path/to/project')
+ * const config = loader.load('production')
+ * const environments = loader.listEnvironments()
+ * ```
  */
 export class ConfigLoader {
   private baseDir: string
@@ -16,6 +28,10 @@ export class ConfigLoader {
 
   /**
    * 加载环境配置
+   *
+   * @param environment - 环境名称，对应 `.env.{environment}` 文件
+   * @returns 解析后的配置对象
+   * @throws {错误} 当配置文件不存在或解析失败时
    */
   load(environment: Environment): ConfigObject {
     const envFile = this.getEnvFilePath(environment)
@@ -36,6 +52,10 @@ export class ConfigLoader {
 
   /**
    * 加载多个环境配置（支持继承）
+   *
+   * @param environment - 目标环境名称
+   * @param baseEnvironment - 基础环境名称，目标环境会覆盖基础环境的配置
+   * @returns 合并后的配置对象
    */
   loadWithInheritance(environment: Environment, baseEnvironment?: Environment): ConfigObject {
     let config: ConfigObject = {}
@@ -175,6 +195,21 @@ export class ConfigLoader {
 
   /**
    * 序列化配置对象为 .env 格式
+   *
+   * @param config - 配置对象
+   * @param comments - 可选的字段注释映射
+   * @returns .env 格式的字符串
+   *
+   * @example
+   * ```typescript
+   * const content = loader.serialize(
+   *   { API_URL: 'https://api.example.com', PORT: '3000' },
+   *   { API_URL: 'API 服务地址' }
+   * )
+   * // # API 服务地址
+   * // API_URL=https://api.example.com
+   * // PORT=3000
+   * ```
    */
   serialize(config: ConfigObject, comments?: Record<string, string>): string {
     const lines: string[] = []

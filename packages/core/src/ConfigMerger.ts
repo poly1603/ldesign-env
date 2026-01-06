@@ -24,7 +24,7 @@ export class ConfigMerger {
     for (const [key, value] of Object.entries(source)) {
       if (this.isPlainObject(value) && this.isPlainObject(result[key])) {
         // 递归合并对象
-        result[key] = this.deepMerge(result[key], value)
+        result[key] = this.deepMerge(result[key] as ConfigObject, value as ConfigObject)
       } else {
         // 直接覆盖
         result[key] = value
@@ -59,7 +59,7 @@ export class ConfigMerger {
     for (const key of includeKeys) {
       if (key in source) {
         if (this.isPlainObject(source[key]) && this.isPlainObject(result[key])) {
-          result[key] = this.deepMerge(result[key], source[key])
+          result[key] = this.deepMerge(result[key] as ConfigObject, source[key] as ConfigObject)
         } else {
           result[key] = source[key]
         }
@@ -186,7 +186,7 @@ export class ConfigMerger {
       const newKey = prefix ? `${prefix}${separator}${key}` : key
 
       if (this.isPlainObject(value)) {
-        Object.assign(result, this.flatten(value, newKey, separator))
+        Object.assign(result, this.flatten(value as ConfigObject, newKey, separator))
       } else {
         result[newKey] = value
       }
@@ -203,14 +203,14 @@ export class ConfigMerger {
 
     for (const [key, value] of Object.entries(config)) {
       const keys = key.split(separator)
-      let current = result
+      let current: ConfigObject = result
 
       for (let i = 0; i < keys.length - 1; i++) {
         const k = keys[i]
         if (!(k in current)) {
           current[k] = {}
         }
-        current = current[k]
+        current = current[k] as ConfigObject
       }
 
       current[keys[keys.length - 1]] = value

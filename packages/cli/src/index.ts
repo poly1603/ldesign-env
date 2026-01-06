@@ -20,6 +20,8 @@ import { exportCommand } from './commands/export.js'
 import { serveCommand } from './commands/serve.js'
 import { templateCommand } from './commands/template.js'
 import { importCommand } from './commands/import.js'
+import { searchCommand } from './commands/search.js'
+import { backupCommand } from './commands/backup.js'
 
 // 获取 package.json
 const __filename = fileURLToPath(import.meta.url)
@@ -49,6 +51,8 @@ getCommand(program)
 setCommand(program)
 exportCommand(program)
 serveCommand(program)
+searchCommand(program)
+backupCommand(program)
 
 // 显示帮助信息
 program.on('--help', () => {
